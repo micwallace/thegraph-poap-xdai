@@ -1,6 +1,7 @@
 type Token @entity
 {
   id:                           ID!
+  uri:                          String!
   owner:                        Account!
   event:                        Event
   transfers:                    [Transfer!]! @derivedFrom(field: "token")

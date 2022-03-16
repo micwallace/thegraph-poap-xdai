@@ -5,6 +5,7 @@ import {
 import {
   EventToken as EventTokenEvent,
   Transfer   as TransferEvent,
+  Poap
 } from '../generated/Poap/Poap'
 
 import {
@@ -70,6 +71,19 @@ export function handleTransfer(ev: TransferEvent): void {
     token               = new Token(ev.params.tokenId.toString());
     token.transferCount = BigInt.fromI32(0);
     token.created       = ev.block.timestamp
+
+    let tokenContract = Poap.bind(ev.address);
+    token.uri = tokenContract.tokenURI(ev.params.tokenId);
+
+    // TODO: get metadata from HTTPS once graph-ts has an API for this
+    /*if (token.uri){
+      try {
+        let data = await fetch(token.uri);
+        token.data = await data.text();
+      } catch(e){
+
+      }
+    }*/
   }
   token.owner = to.id;
   token.transferCount += BigInt.fromI32(1);
